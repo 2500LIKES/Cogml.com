@@ -1,99 +1,173 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>คำถามสำคัญ</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-            position: relative;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 25px;
-            font-size: 24px;
-        }
-        .btn-container {
-            display: flex;
-            justify-content: space-around;
-            gap: 15px;
-            position: relative;
-            height: 50px;
-        }
-        .btn {
-            padding: 12px 30px;
-            font-size: 18px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.2s, background-color 0.2s;
-            width: 45%;
-            position: absolute;
-        }
-        .btn-yes {
-            background-color: #2ecc71;
-            color: white;
-            left: 5%;
-        }
-        .btn-yes:hover {
-            background-color: #27ae60;
-        }
-        .btn-no {
-            background-color: #e74c3c;
-            color: white;
-            right: 5%;
-            transition: all 0.1s ease;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ซองอั่งเปา</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#111,#260000,#5b0000);
+  color:#fff;
+}
+
+.box{
+  width:90%;
+  max-width:380px;
+  padding:30px 24px;
+  border-radius:22px;
+  background:rgba(20,20,20,.94);
+  box-shadow:0 0 35px rgba(255,0,0,.25);
+  text-align:center;
+}
+
+.icon{
+  font-size:65px;
+  margin-bottom:10px;
+}
+
+.check{
+  font-size:70px;
+  margin:15px;
+}
+
+h1{
+  margin:5px 0 10px;
+}
+
+p{
+  color:#ccc;
+}
+
+input{
+  width:100%;
+  padding:15px;
+  border:0;
+  outline:0;
+  border-radius:12px;
+  margin:15px 0;
+  text-align:center;
+  font-size:18px;
+}
+
+button{
+  width:100%;
+  padding:15px;
+  border:0;
+  border-radius:12px;
+  background:#e00000;
+  color:#fff;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#ff1717;
+}
+
+.hidden{
+  display:none;
+}
+
+.error{
+  color:#ff5555;
+  margin-top:12px;
+}
+
+.small{
+  font-size:14px;
+  color:#999;
+}
+</style>
 </head>
+
 <body>
 
-    <div class="card">
-        <h1>เจ้าของกลุ่มหล่อไหม? 🤔</h1>
-        <div class="btn-container">
-            <button class="btn btn-yes" onclick="answerYes()">หล่อ</button>
-            <button class="btn btn-no" id="noBtn" onmouseover="moveButton()" onclick="moveButton()">ไม่หล่อ</button>
-        </div>
-    </div>
+<!-- หน้า 1 : ใส่รหัส -->
+<div class="box" id="page1">
+  <div class="icon">🧧</div>
 
-    <script>
-        function answerYes() {
-            // ลิงก์ปลายทางใหม่ที่คุณระบุไว้
-            window.location.href = "https://gift.truemoney.com/campaign?v=019fe63f20b37595268b424f00b1b2e76cz";
-        }
+  <h1>ซองอั่งเปา</h1>
 
-        function moveButton() {
-            const btn = document.getElementById('noBtn');
-            // สุ่มตำแหน่งใหม่ให้ปุ่มวิ่งหนีรอบหน้าจอเมื่อเอาเมาส์ไปชี้หรือกด
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
-            
-            btn.style.position = 'fixed';
-            btn.style.left = x + 'px';
-            btn.style.top = y + 'px';
-        }
-    </script>
+  <p>กรอกรหัสซองเพื่อดำเนินการต่อ</p>
+
+  <input
+    id="code"
+    type="text"
+    placeholder="กรอกรหัส"
+    maxlength="20"
+  >
+
+  <button onclick="checkCode()">ยืนยัน</button>
+
+  <div id="error" class="error"></div>
+</div>
+
+
+<!-- หน้า 2 : ยืนยัน -->
+<div class="box hidden" id="page2">
+  <div class="check">🤖</div>
+
+  <h1>ยืนยันตัวตน</h1>
+
+  <p>คุณใช่บอทหรือไม่?</p>
+
+  <button onclick="goToGift()">ไม่ใช่บอท ✓</button>
+
+  <p class="small">
+    การยืนยันนี้เป็นเพียงขั้นตอนของหน้าเว็บทดลอง
+  </p>
+</div>
+
+
+<script>
+function checkCode(){
+
+  const code =
+    document.getElementById("code").value.trim();
+
+  const error =
+    document.getElementById("error");
+
+  if(code === "5000"){
+
+    document
+      .getElementById("page1")
+      .classList.add("hidden");
+
+    document
+      .getElementById("page2")
+      .classList.remove("hidden");
+
+  }else{
+
+    error.textContent = "❌ รหัสไม่ถูกต้อง";
+
+  }
+}
+
+
+function goToGift(){
+
+  window.location.href =
+    "https://gift.truemoney.com/campaign/?v=01a09f6eaec67439b820dd681569dd049c";
+
+}
+</script>
 
 </body>
-</html>
-
+</html><!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
